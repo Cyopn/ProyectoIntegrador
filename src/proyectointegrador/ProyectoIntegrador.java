@@ -5,7 +5,11 @@ import javax.swing.*;
 
 public class ProyectoIntegrador extends JFrame {
 
+    private final Panels p = new Panels();
     private final JMenuBar mb = new JMenuBar();
+    private final JMenu ms = new JMenu("Simulacion");
+    private final JMenuItem msp = new JMenuItem("Numero pseudoaleatorio");
+    private final JMenuItem msc = new JMenuItem("Chi-cuadrada");
     private final JMenu mc = new JMenu("Calculo");
     private final JMenuItem mci = new JMenuItem("Integral");
     private final JMenuItem mcd = new JMenuItem("Diferencial");
@@ -20,13 +24,22 @@ public class ProyectoIntegrador extends JFrame {
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        mb.add(ms);
+        ms.add(msp);
+        ms.add(msc);
+
         mb.add(mc);
         mc.add(mci);
         mc.add(mcd);
-        
+
         mb.add(mi);
         mi.add(mim);
         mi.add(mir);
+
+        msp.addActionListener((ActionEvent e) -> {
+            snpBtn(e);
+        });
         mci.addActionListener((ActionEvent e) -> {
             cinBtn(e);
         });
@@ -34,24 +47,28 @@ public class ProyectoIntegrador extends JFrame {
             cdiBtn(e);
         });
         this.setJMenuBar(mb);
-        Panels p = new Panels();
-        p.cleanPanel(this);
+        p.pseudoPanel(this, mb);
         this.setVisible(true);
     }
 
     public static void main(String[] args) {
-        new ProyectoIntegrador().setVisible(true);
+        //new LoadView();
+        new ProyectoIntegrador();
+
     }
 
     private void cinBtn(ActionEvent e) {
-        Panels p = new Panels();
         p.cleanPanel(this);
         p.integralPanel(this, mb);
     }
 
     private void cdiBtn(ActionEvent e) {
-        Panels p = new Panels();
         p.cleanPanel(this);
         p.diferencialPanel(this, mb);
+    }
+
+    private void snpBtn(ActionEvent e) {
+        p.cleanPanel(this);
+        p.pseudoPanel(this, mb);
     }
 }
