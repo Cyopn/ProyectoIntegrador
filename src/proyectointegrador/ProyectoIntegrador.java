@@ -10,12 +10,11 @@ public class ProyectoIntegrador extends JFrame {
     private final JMenu ms = new JMenu("Simulacion");
     private final JMenuItem msp = new JMenuItem("Numero pseudoaleatorio");
     private final JMenuItem msc = new JMenuItem("Chi-cuadrada");
+    private final JMenuItem msm = new JMenuItem("Media movil");
     private final JMenu mc = new JMenu("Calculo");
     private final JMenuItem mci = new JMenuItem("Integral");
     private final JMenuItem mcd = new JMenuItem("Diferencial");
-    private final JMenu mi = new JMenu("Investigacion de operaciones");
-    private final JMenuItem mim = new JMenuItem("Maximizar o minimizar");
-    private final JMenuItem mir = new JMenuItem("Refion factible");
+    private final JMenuItem mca = new JMenuItem("Area");
 
     public ProyectoIntegrador() {
         this.setSize(500, 400);
@@ -28,17 +27,21 @@ public class ProyectoIntegrador extends JFrame {
         mb.add(ms);
         ms.add(msp);
         ms.add(msc);
+        ms.add(msm);
 
         mb.add(mc);
         mc.add(mci);
         mc.add(mcd);
-
-        mb.add(mi);
-        mi.add(mim);
-        mi.add(mir);
+        mc.add(mca);
 
         msp.addActionListener((ActionEvent e) -> {
-            snpBtn(e);
+            mspBtn(e);
+        });
+        msc.addActionListener((ActionEvent e) -> {
+            mscBtn(e);
+        });
+        msm.addActionListener((ActionEvent e) -> {
+            msmBtn(e);
         });
         mci.addActionListener((ActionEvent e) -> {
             cinBtn(e);
@@ -46,8 +49,11 @@ public class ProyectoIntegrador extends JFrame {
         mcd.addActionListener((ActionEvent e) -> {
             cdiBtn(e);
         });
+        mca.addActionListener((ActionEvent e) -> {
+            mcaBtn(e);
+        });
         this.setJMenuBar(mb);
-        p.pseudoPanel(this, mb);
+        p.initPanel(this, mb);
         this.setVisible(true);
     }
 
@@ -67,8 +73,23 @@ public class ProyectoIntegrador extends JFrame {
         p.diferencialPanel(this, mb);
     }
 
-    private void snpBtn(ActionEvent e) {
+    private void mspBtn(ActionEvent e) {
         p.cleanPanel(this);
         p.pseudoPanel(this, mb);
+    }
+
+    private void mscBtn(ActionEvent e) {
+        p.cleanPanel(this);
+        p.chiPanel(this, mb);
+    }
+
+    private void msmBtn(ActionEvent e) {
+        p.cleanPanel(this);
+        p.mediaPanel(this, mb);
+    }
+    
+    private void mcaBtn(ActionEvent e){
+        p.cleanPanel(this);
+        p.areaPanel(this, mb);
     }
 }

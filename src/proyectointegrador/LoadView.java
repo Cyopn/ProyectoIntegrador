@@ -6,8 +6,9 @@ import javax.swing.*;
 public class LoadView extends Frame {
 
     JLabel l = new JLabel();
+    ImageIcon im = new ImageIcon("bg.jpeg");
     JLabel t = new JLabel("Proyecto Integrador");
-    JLabel m = new JLabel("Simulacion");
+
     JProgressBar p = new JProgressBar();
 
     public LoadView() {
@@ -18,23 +19,23 @@ public class LoadView extends Frame {
         this.setLocationRelativeTo(null);
         this.setBackground(new Color(46, 144, 232));
 
+        l.setIcon(im);
+        l.setBounds(0, 0, 400, 300);
+
         t.setFont(new Font("Arial", Font.BOLD, 18));
         t.setBounds(25, 25, 350, 25);
-        t.setForeground(new Color(161, 197, 53));
-
-        m.setFont(new Font("Arial", Font.BOLD, 15));
-        m.setBounds(250, 320, 200, 40);
-        m.setForeground(Color.black);
+        t.setForeground(new Color(35, 43, 46));
 
         p.setBounds(25, 250, 350, 5);
         p.setBorderPainted(true);
-        p.setBackground(Color.WHITE);
-        p.setForeground(Color.red);
+        p.setBackground(new Color(175, 198, 204));
+        p.setForeground(new Color(121, 141, 144));
         p.setValue(0);
 
         this.add(t);
-        this.add(m);
         this.add(p);
+
+        this.add(l);
 
         this.setVisible(true);
         runBar();
