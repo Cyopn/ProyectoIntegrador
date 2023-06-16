@@ -11,10 +11,22 @@ public class ProyectoIntegrador extends JFrame {
     private final JMenuItem msp = new JMenuItem("Numero pseudoaleatorio");
     private final JMenuItem msc = new JMenuItem("Chi-cuadrada");
     private final JMenuItem msm = new JMenuItem("Media movil");
+    private final JMenuItem msv = new JMenuItem("Smirnov-Kolmogorov");
     private final JMenu mc = new JMenu("Calculo");
     private final JMenuItem mci = new JMenuItem("Integral");
     private final JMenuItem mcd = new JMenuItem("Diferencial");
-    private final JMenuItem mca = new JMenuItem("Area");
+
+    private final JMenu mf = new JMenu("Funciones");
+    private final JMenuItem mfa = new JMenuItem("Area");
+    private final JMenuItem mfg = new JMenuItem("Grafica");
+
+    private final JMenu mi = new JMenu("Investigacion de operaciones");
+    private final JMenuItem mio = new JMenuItem("Optimizacion");
+    private final JMenuItem mir = new JMenuItem("Region factible");
+
+    private final JMenu mn = new JMenu("Metodos Numericos");
+    private final JMenuItem mni = new JMenuItem("Intervalo");
+    private final JMenuItem mnb = new JMenuItem("Biseccion");
 
     public ProyectoIntegrador() {
         this.setSize(500, 400);
@@ -28,11 +40,23 @@ public class ProyectoIntegrador extends JFrame {
         ms.add(msp);
         ms.add(msc);
         ms.add(msm);
+        ms.add(msv);
 
         mb.add(mc);
         mc.add(mci);
         mc.add(mcd);
-        mc.add(mca);
+
+        mb.add(mf);
+        mf.add(mfa);
+        mf.add(mfg);
+
+        //mb.add(mi);
+        mi.add(mio);
+        mi.add(mir);
+
+        //mb.add(mn);
+        mn.add(mni);
+        mn.add(mnb);
 
         msp.addActionListener((ActionEvent e) -> {
             mspBtn(e);
@@ -43,14 +67,32 @@ public class ProyectoIntegrador extends JFrame {
         msm.addActionListener((ActionEvent e) -> {
             msmBtn(e);
         });
+        msv.addActionListener((ActionEvent e) -> {
+            msvBTtn(e);
+        });
         mci.addActionListener((ActionEvent e) -> {
             cinBtn(e);
         });
         mcd.addActionListener((ActionEvent e) -> {
             cdiBtn(e);
         });
-        mca.addActionListener((ActionEvent e) -> {
+        mfa.addActionListener((ActionEvent e) -> {
             mcaBtn(e);
+        });
+        mfg.addActionListener((ActionEvent e) -> {
+            mfgBtn(e);
+        });
+
+        mio.addActionListener((ActionEvent e) -> {
+            mioBtn(e);
+        });
+
+        mir.addActionListener((ActionEvent e) -> {
+
+        });
+
+        mni.addActionListener((ActionEvent e) -> {
+            mniBtn(e);
         });
         this.setJMenuBar(mb);
         p.initPanel(this, mb);
@@ -58,8 +100,9 @@ public class ProyectoIntegrador extends JFrame {
     }
 
     public static void main(String[] args) {
-        //new LoadView();
-        new ProyectoIntegrador();
+        new LoadView();
+        new Functions("").val();
+        //new ProyectoIntegrador();
 
     }
 
@@ -87,9 +130,39 @@ public class ProyectoIntegrador extends JFrame {
         p.cleanPanel(this);
         p.mediaPanel(this, mb);
     }
-    
-    private void mcaBtn(ActionEvent e){
+
+    private void mcaBtn(ActionEvent e) {
         p.cleanPanel(this);
         p.areaPanel(this, mb);
+    }
+
+    private void msvBTtn(ActionEvent e) {
+        p.cleanPanel(this);
+        p.skPanel(this, mb);
+    }
+
+    private void mfgBtn(ActionEvent e) {
+        p.cleanPanel(this);
+        p.funPanel(this, mb);
+    }
+
+    private void mioBtn(ActionEvent e) {
+        p.cleanPanel(this);
+        p.optPanel(this, mb);
+    }
+
+    private void mirBtn(ActionEvent e) {
+        p.cleanPanel(this);
+        p.rfPanel(this, mb);
+    }
+
+    private void mniBtn(ActionEvent e) {
+        p.cleanPanel(this);
+        p.intPanel(this, mb);
+    }
+
+    private void mnbBtn(ActionEvent e) {
+        p.cleanPanel(this);
+        p.rfPanel(this, mb);
     }
 }

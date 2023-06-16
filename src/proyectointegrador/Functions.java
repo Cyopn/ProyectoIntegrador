@@ -12,9 +12,12 @@ public class Functions {
 
     String df;
 
+    public void val() {
+        License.iConfirmNonCommercialUse("Cyopn");
+    }
+
     public Functions(String def) {
         df = def;
-        License.iConfirmNonCommercialUse("Cyopn");
     }
 
     public double eval(double x) throws Exception {
@@ -30,7 +33,6 @@ public class Functions {
             r[i] = xo;
             xo += d;
         }
-
         return r;
     }
 
@@ -44,8 +46,8 @@ public class Functions {
     }
 
     public double area(String fn, int a, int b) {
-        Expression e = new Expression(fn.replaceAll("x", String.valueOf(a)));
-        Expression e1 = new Expression(fn.replaceAll("x", String.valueOf(b)));
+        Expression e = new Expression(fn.replaceAll("x", String.valueOf(a)).replaceAll("log", "lg"));
+        Expression e1 = new Expression(fn.replaceAll("x", String.valueOf(b)).replaceAll("log", "lg"));
 
         return e1.calculate() - e.calculate();
     }

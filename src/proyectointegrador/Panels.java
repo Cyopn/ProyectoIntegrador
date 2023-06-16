@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 import javax.swing.*;
@@ -29,6 +30,7 @@ public class Panels {
     }
 
     public void integralPanel(JFrame fr, JMenuBar mb) {
+        fr.setSize(500, 400);
         JPanel p = new JPanel();
         JLabel lbl = new JLabel("Calculo de integrales");
         JLabel lbl2 = new JLabel("Escribe tu funcion aqui:");
@@ -42,7 +44,7 @@ public class Panels {
         lbl3.setFont(new Font("Arial", Font.PLAIN, 20));
         lbl.setBounds((fr.getWidth() - 210) / 2, 10, 200, 22);
         lbl2.setBounds(75, 45, 200, 22);
-        lbl3.setBounds((fr.getWidth() - 210) / 2, 225, 200, 22);
+        lbl3.setBounds((fr.getWidth() - 210) / 2, 200, 200, 22);
         lbl3.setHorizontalAlignment(SwingConstants.CENTER);
         txt.setBounds((fr.getWidth() - 160) / 2, 80, 150, 22);
         btn.setBounds((fr.getWidth() - 110) / 2, 120, 100, 22);
@@ -65,6 +67,7 @@ public class Panels {
     }
 
     public void diferencialPanel(JFrame fr, JMenuBar mb) {
+        fr.setSize(500, 400);
         JPanel p = new JPanel();
         JLabel lbl = new JLabel("Calculo de derivadas");
         JLabel lbl2 = new JLabel("Escribe tu funcion aqui:");
@@ -78,7 +81,7 @@ public class Panels {
         lbl3.setFont(new Font("Arial", Font.PLAIN, 20));
         lbl.setBounds((fr.getWidth() - 210) / 2, 10, 200, 22);
         lbl2.setBounds(75, 45, 200, 22);
-        lbl3.setBounds((fr.getWidth() - 210) / 2, 225, 200, 22);
+        lbl3.setBounds((fr.getWidth() - 210) / 2, 200, 200, 22);
         lbl3.setHorizontalAlignment(SwingConstants.CENTER);
         txt.setBounds((fr.getWidth() - 160) / 2, 80, 150, 22);
         btn.setBounds((fr.getWidth() - 110) / 2, 120, 100, 22);
@@ -141,6 +144,7 @@ public class Panels {
                 return canEdit[columnIndex];
             }
         });
+        t.getTableHeader().setReorderingAllowed(false);
         btn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -189,20 +193,14 @@ public class Panels {
     }
 
     public void chiPanel(JFrame fr, JMenuBar mb) {
-        fr.setSize(500, 450);
+        fr.setSize(500, 400);
         JPanel p = new JPanel();
         JLabel lbl = new JLabel("Chi-cuadrada");
-        JLabel lc = new JLabel("Categoria");
-        JLabel lh = new JLabel("Categoria");
-        JLabel lm = new JLabel("Categoria");
-        JTextField tc = new JTextField();
         JTextField th = new JTextField();
         ((AbstractDocument) th.getDocument()).setDocumentFilter(new validator());
         JTextField tm = new JTextField();
         ((AbstractDocument) tm.getDocument()).setDocumentFilter(new validator());
         JButton btn = new JButton("Generar");
-        JButton sb = new JButton("Guardar");
-        Font fo = new Font("Arial", Font.BOLD, 12);
         JTable t = new JTable();
         JScrollPane sp = new JScrollPane(t);
         p.setLayout(null);
@@ -210,7 +208,7 @@ public class Panels {
         t.setModel(new DefaultTableModel(
                 new Object[][]{},
                 new String[]{
-                    "Categoria", "Hombre", "Mujer", "Total"
+                    "Intervalo", "O", "E", "E^2"
                 }
         ) {
             Class[] types = new Class[]{
@@ -229,18 +227,50 @@ public class Panels {
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit[columnIndex];
             }
+
         });
+        int[] o = new int[11];
+        List<String> in = new ArrayList<>();
+        List<String> ls = f.loadNp(fr, mb);
+        int e = Integer.parseInt(((ls.size() / 10) + "").replaceAll("\\..*", ""));
+        DefaultTableModel mt = (DefaultTableModel) t.getModel();
+        double x = 0;
+        DecimalFormat df = new DecimalFormat("#.0");
+        int id = 0;
+        int io = 0;
+        while (x < 0.9) {
+            for (String r : ls) {
+                if (Double.parseDouble(r) >= Double.parseDouble(df.format((x))) && Double.parseDouble(r) <= Double.parseDouble(df.format((x + 0.1)))) {
+                    io++;
+                    o[id] = io;
+                }
+            }
+            id++;
+            io = 0;
+            in.add(df.format(x) + " - " + df.format((x + 0.1)));
+            x = x + 0.1;
+        }
+        id = 0;
+        for (String r : in) {
+            Object[] ro = {r, o[id], e, ""};
+            id++;
+            mt.addRow(ro);
+        }
+        btn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Buttons b = new Buttons();
+                b.chiBtn(e, fr, t);
+            }
+        });
+        t.getTableHeader().setReorderingAllowed(false);
         lbl.setHorizontalAlignment(SwingConstants.CENTER);
         lbl.setFont(new Font("Arial", Font.PLAIN, 20));
         lbl.setBounds((fr.getWidth() - 210) / 2, 10, 200, 22);
-        lc.setFont(fo);
-        lc.setBounds(63, 35, 75, 22);
-        btn.setBounds((fr.getWidth() - 200) / 3, 320, 90, 22);
-        sb.setBounds(((fr.getWidth() - 200) / 3) * 3, 320, 90, 22);
-        sp.setBounds(18, 90, 450, 200);
+        btn.setBounds((fr.getWidth() - 100) / 2, 280, 90, 22);
+        sp.setBounds(18, 55, 450, 183);
         p.add(lbl);
         p.add(btn);
-        p.add(sb);
         p.add(sp);
         fr.add(p);
         fr.revalidate();
@@ -249,7 +279,7 @@ public class Panels {
     }
 
     public void mediaPanel(JFrame fr, JMenuBar mb) {
-        fr.setSize(500, 450);
+        fr.setSize(500, 410);
         JPanel p = new JPanel();
         JLabel lbl = new JLabel("Media Movil");
         JTable t = new JTable();
@@ -280,7 +310,7 @@ public class Panels {
                 return canEdit[columnIndex];
             }
         });
-
+        t.getTableHeader().setReorderingAllowed(false);
         lbl.setHorizontalAlignment(SwingConstants.CENTER);
         lbl.setFont(new Font("Arial", Font.PLAIN, 20));
         lbl.setBounds((fr.getWidth() - 210) / 2, 10, 200, 22);
@@ -346,7 +376,7 @@ public class Panels {
         lbl3.setBounds(180, 85, 400, 22);
         lbl.setHorizontalAlignment(SwingConstants.CENTER);
         txt.setBounds(200, 45, 150, 22);
-        sa.setBounds(450, 45, 50, 22);
+        sa.setBounds(435, 45, 50, 22);
         sb.setBounds(580, 45, 50, 22);
         btn.setBounds(50, 85, 100, 22);
         g.setBounds(0, 120, 684, 418);
@@ -354,7 +384,7 @@ public class Panels {
             @Override
             public void mouseClicked(MouseEvent e) {
                 Buttons b = new Buttons();
-                b.aBtn(e, fr, txt, sa, sb, lbl3, p, d);
+                b.aBtn(e, fr, txt, sa, sb, lbl3, d);
             }
         });
 
@@ -372,6 +402,213 @@ public class Panels {
         fr.revalidate();
         fr.repaint();
         fr.setLocationRelativeTo(null);
+    }
+
+    public void skPanel(JFrame fr, JMenuBar mb) {
+        fr.setSize(500, 430);
+        JPanel p = new JPanel();
+        JLabel lbl = new JLabel("Smirnov-Kolmogorov");
+        JLabel dp = new JLabel("D+=");
+        JLabel dn = new JLabel("D-=");
+
+        JTable t = new JTable();
+        JScrollPane sp = new JScrollPane(t);
+        JButton b = new JButton("Generar");
+        p.setLayout(null);
+        p.setSize(fr.getWidth(), fr.getHeight() - mb.getHeight());
+        t.setModel(new DefaultTableModel(
+                new Object[][]{},
+                new String[]{
+                    "i", "ri", "i/n", "(i-1)/n", "(i/n)-ri", "ri-(i-1)/n"}
+        ) {
+            Class[] types = new Class[]{
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean[]{
+                false, false, false, false, false
+            };
+
+            @Override
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        });
+        t.getTableHeader().setReorderingAllowed(false);
+        lbl.setHorizontalAlignment(SwingConstants.CENTER);
+        lbl.setFont(new Font("Arial", Font.PLAIN, 20));
+        lbl.setBounds((fr.getWidth() - 210) / 2, 10, 200, 22);
+        dp.setBounds((fr.getWidth() - 210) / 3, 265, 200, 22);
+        dn.setBounds((fr.getWidth() - 210), 265, 200, 22);
+
+        sp.setBounds(18, 50, 450, 200);
+        b.setBounds((fr.getWidth() - 90) / 2, 310, 80, 22);
+        DefaultTableModel mt = (DefaultTableModel) t.getModel();
+        int x = 1;
+        List<String> l = f.loadNp(fr, mb);
+        Collections.sort(l);
+        for (String r : l) {
+            Object[] ro = {x, r};
+            x++;
+            mt.addRow(ro);
+        }
+        b.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Buttons b = new Buttons();
+                b.skBtn(e, fr, t, dp, dn);
+            }
+        });
+        p.add(lbl);
+        p.add(dp);
+        p.add(dn);
+        p.add(sp);
+        p.add(b);
+        fr.add(p);
+        fr.revalidate();
+        fr.repaint();
+        fr.setLocationRelativeTo(null);
+    }
+
+    public void funPanel(JFrame fr, JMenuBar mb) {
+        fr.setSize(700, 600);
+        JPanel p = new JPanel();
+        JLabel lbl = new JLabel("Grafica de funciones");
+        JLabel lbl2 = new JLabel("Escribe tu funcion aqui:");
+        JLabel lbla = new JLabel("Intervalo");
+        JLabel lblb = new JLabel("Intervalo");
+        JTextField txt = new JTextField(25);
+        JSpinner sa = new JSpinner(new SpinnerNumberModel(-5, -1000, 1000, 1));
+        JSpinner sb = new JSpinner(new SpinnerNumberModel(5, -1000, 1000, 1));
+        JButton btn = new JButton("Graficar");
+        XYSeriesCollection d = new XYSeriesCollection();
+        JPanel g = new ChartPanel(ChartFactory.createXYLineChart("Grafica de funciones", "x", "y", d));
+        p.setLayout(null);
+        p.setSize(fr.getWidth(), fr.getHeight() - mb.getHeight());
+        lbl.setFont(new Font("Arial", Font.PLAIN, 18));
+        lbl2.setFont(new Font("Arial", Font.PLAIN, 16));
+        lbla.setFont(new Font("Arial", Font.PLAIN, 16));
+        lblb.setFont(new Font("Arial", Font.PLAIN, 16));
+        lbl.setBounds((fr.getWidth() - 310) / 2, 10, 300, 22);
+        lbl2.setBounds(35, 45, 200, 22);
+        lbla.setBounds(370, 45, 75, 22);
+        lblb.setBounds(520, 45, 75, 22);
+        lbl.setHorizontalAlignment(SwingConstants.CENTER);
+        txt.setBounds(200, 45, 150, 22);
+        sa.setBounds(435, 45, 50, 22);
+        sb.setBounds(580, 45, 50, 22);
+        btn.setBounds(50, 85, 100, 22);
+        g.setBounds(0, 120, 684, 418);
+        btn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Buttons b = new Buttons();
+                b.grBtn(e, fr, txt, sa, sb, d);
+            }
+        });
+
+        p.add(lbl);
+        p.add(lbl2);
+        p.add(lbla);
+        p.add(lblb);
+        p.add(txt);
+        p.add(sa);
+        p.add(sb);
+        p.add(btn);
+        p.add(g);
+        fr.add(p);
+        fr.revalidate();
+        fr.repaint();
+        fr.setLocationRelativeTo(null);
+    }
+
+    public void optPanel(JFrame fr, JMenuBar mb) {
+        //  fr.setSize();
+    }
+
+    public void rfPanel(JFrame fr, JMenuBar mb) {
+        //  fr.setSize();
+    }
+
+    public void intPanel(JFrame fr, JMenuBar mb) {
+        fr.setSize(700, 600);
+        JPanel p = new JPanel();
+        JLabel lbl = new JLabel("Grafica de funciones");
+        JLabel lbl2 = new JLabel("Escribe tu funcion aqui:");
+        JLabel lbla = new JLabel("Intervalo");
+        JLabel lblb = new JLabel("Intervalo");
+        JTextField txt = new JTextField(25);
+        JSpinner sa = new JSpinner(new SpinnerNumberModel(0, -1000, 1000, 1));
+        JSpinner sb = new JSpinner(new SpinnerNumberModel(1, -1000, 1000, 1));
+        JButton btn = new JButton("Obtener");
+        JTable t = new JTable();
+        JScrollPane sp = new JScrollPane(t);
+        p.setLayout(null);
+        p.setSize(fr.getWidth(), fr.getHeight() - mb.getHeight());
+        t.setModel(new DefaultTableModel(
+                new Object[][]{},
+                new String[]{
+                    "Vuelta", "a", "b", "f(a)", "f(b)", "Xo", "f(Xo)", "f(a)*f(Xo)"}
+        ) {
+            Class[] types = new Class[]{
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean[]{
+                false, false, false, false, false
+            };
+
+            @Override
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        });
+
+        lbl.setFont(new Font("Arial", Font.PLAIN, 18));
+        lbl2.setFont(new Font("Arial", Font.PLAIN, 16));
+        lbla.setFont(new Font("Arial", Font.PLAIN, 16));
+        lblb.setFont(new Font("Arial", Font.PLAIN, 16));
+        lbl.setBounds((fr.getWidth() - 310) / 2, 10, 300, 22);
+        lbl2.setBounds(35, 45, 200, 22);
+        lbla.setBounds(370, 45, 75, 22);
+        lblb.setBounds(520, 45, 75, 22);
+        lbl.setHorizontalAlignment(SwingConstants.CENTER);
+        txt.setBounds(200, 45, 150, 22);
+        sa.setBounds(435, 45, 50, 22);
+        sb.setBounds(580, 45, 50, 22);
+        btn.setBounds(50, 85, 100, 22);
+        t.getTableHeader().setReorderingAllowed(false);
+        sp.setBounds(18, 125, 650, 200);
+
+        btn.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                new Buttons().intBtn(e, fr, txt, sa, sb);
+            }
+        });
+        
+        p.add(lbl2);
+        p.add(lbla);
+        p.add(lblb);
+        p.add(txt);
+        p.add(sa);
+        p.add(sb);
+        p.add(btn);
+        p.add(lbl);
+        p.add(sp);
+        fr.add(p);
+        fr.revalidate();
+        fr.repaint();
+        fr.setLocationRelativeTo(null);
+
     }
 
     public void cleanPanel(JFrame fr) {

@@ -1,1 +1,1 @@
-{"type": "derivate", "eval": "x**2", "result": "2*x", "error": ""}
+{"type": "derivate", "eval": "cos(2*x)", "result": "-2*sin(2*x)", "error": ""}

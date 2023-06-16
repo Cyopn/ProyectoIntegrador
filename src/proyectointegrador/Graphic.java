@@ -20,9 +20,11 @@ public class Graphic extends JFrame {
         p.setBounds(0, 0, 584, 464);
         
         XYSeries ss = new XYSeries(ff);
+        
         for (int i = 0; i < xx.length; i++) {
             ss.add(xx[i], yy[i]);
         }
+        
         d.addSeries(ss);
         
         XYSeries s = new XYSeries(f);

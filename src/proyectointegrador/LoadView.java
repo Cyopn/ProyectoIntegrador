@@ -8,6 +8,8 @@ public class LoadView extends Frame {
     JLabel l = new JLabel();
     ImageIcon im = new ImageIcon("bg.jpeg");
     JLabel t = new JLabel("Proyecto Integrador");
+    ImageIcon iw = new ImageIcon("w.png");
+    JLabel tw = new JLabel("Proyecto Integrador");
 
     JProgressBar p = new JProgressBar();
 
@@ -21,10 +23,13 @@ public class LoadView extends Frame {
 
         l.setIcon(im);
         l.setBounds(0, 0, 400, 300);
+        
+        tw.setIcon(iw);
+        tw.setBounds(270, 180, 100, 65);
 
         t.setFont(new Font("Arial", Font.BOLD, 18));
-        t.setBounds(25, 25, 350, 25);
-        t.setForeground(new Color(35, 43, 46));
+        t.setBounds(30, 30, 350, 25);
+        t.setForeground(new Color(58, 110, 130));
 
         p.setBounds(25, 250, 350, 5);
         p.setBorderPainted(true);
@@ -32,6 +37,7 @@ public class LoadView extends Frame {
         p.setForeground(new Color(121, 141, 144));
         p.setValue(0);
 
+        this.add(tw);
         this.add(t);
         this.add(p);
 

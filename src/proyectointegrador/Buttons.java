@@ -2,9 +2,11 @@ package proyectointegrador;
 
 import java.awt.event.MouseEvent;
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -142,7 +144,7 @@ public class Buttons {
     }
 
     public void showBtn(MouseEvent e, JFrame fr, JTable t) {
-        DefaultTableModel to = (DefaultTableModel) t.getModel();
+        TableModel to = (TableModel) t.getModel();
         double[] x = new double[t.getRowCount()];
         double[] y = new double[t.getRowCount()];
         double[] xx = new double[t.getRowCount()];
@@ -168,7 +170,7 @@ public class Buttons {
         }
     }
 
-    public void aBtn(MouseEvent e, JFrame fr, JTextField tx, JSpinner sa, JSpinner sb, JLabel lb, JPanel p, XYSeriesCollection d) {
+    public void aBtn(MouseEvent e, JFrame fr, JTextField tx, JSpinner sa, JSpinner sb, JLabel lb, XYSeriesCollection d) {
         int a = Integer.parseInt(sa.getValue().toString());
         int b = Integer.parseInt(sb.getValue().toString());
         if (tx.getText().isEmpty()) {
@@ -220,7 +222,103 @@ public class Buttons {
                 }
             }
         }
+    }
 
+    public void chiBtn(MouseEvent e, JFrame fr, JTable t) {
+        DefaultTableModel to = (DefaultTableModel) t.getModel();
+        List<String> in = new ArrayList<>();
+        List<Integer> o = new ArrayList<>();
+        List<Integer> ee = new ArrayList<>();
+        for (int i = 0; i < to.getRowCount(); i++) {
+            in.add(to.getValueAt(i, 0).toString());
+            o.add(Integer.parseInt(to.getValueAt(i, 1).toString()));
+            ee.add(Integer.parseInt(to.getValueAt(i, 2).toString()));
+        }
+        int i = 0;
+        double s = 0;
+        double ss = 0;
+        int so = 0;
+        int se = 0;
+        new Functions("").cleanTable(t);
+        while (i <= in.size()) {
+            if (i < in.size()) {
+                s = (Math.pow((o.get(i) - ee.get(i)), 2)) / ee.get(i);
+                to.addRow(new Object[]{in.get(i), o.get(i), ee.get(i), s});
+                ss += s;
+                so += o.get(i);
+                se += ee.get(i);
+            } else {
+                to.addRow(new Object[]{"Total", so, se, ss});
+            }
+
+            i++;
+        }
+        t.setModel(to);
+    }
+
+    public void skBtn(MouseEvent e, JFrame fr, JTable t, JLabel dp, JLabel dn) {
+        DefaultTableModel to = (DefaultTableModel) t.getModel();
+        List<String> l = new ArrayList<>();
+        List<String> ii = new ArrayList<>();
+        for (int i = 0; i < to.getRowCount(); i++) {
+            l.add(to.getValueAt(i, 1).toString());
+            ii.add(to.getValueAt(i, 0).toString());
+
+        }
+        int x = 0;
+        Collections.sort(l);
+        new Functions("").cleanTable(t);
+        DecimalFormat df = new DecimalFormat("#.0000000");
+        for (String r : l) {
+            Object[] ro = {ii.get(x), r, ((double) (x + 1) / l.size()), ((double) x / l.size()), df.format(((double) (x + 1) / l.size()) - Double.parseDouble(r)), df.format(Double.parseDouble(r) - ((double) x / l.size()))};
+            x++;
+            to.addRow(ro);
+        }
+        List<String> nri = new ArrayList<>();
+        List<String> rin = new ArrayList<>();
+        for (int i = 0; i < to.getRowCount(); i++) {
+            nri.add(to.getValueAt(i, 4).toString());
+            rin.add(to.getValueAt(i, 5).toString());
+        }
+        Collections.sort(nri);
+        Collections.sort(rin);
+        dp.setText("D+=  " + nri.get(nri.size() - 1));
+        dn.setText("D-=  " + rin.get(rin.size() - 1));
+        t.setModel(to);
+    }
+
+    public void grBtn(MouseEvent e, JFrame fr, JTextField tx, JSpinner sa, JSpinner sb, XYSeriesCollection d) {
+        int a = Integer.parseInt(sa.getValue().toString());
+        int b = Integer.parseInt(sb.getValue().toString());
+        if (tx.getText().isEmpty()) {
+            JOptionPane.showConfirmDialog(fr, "Escribe una funcion.", "Error", JOptionPane.CLOSED_OPTION, JOptionPane.PLAIN_MESSAGE);
+        } else {
+            if (a >= b) {
+                JOptionPane.showConfirmDialog(fr, "Los intervalos no son validos.", "Error", JOptionPane.CLOSED_OPTION, JOptionPane.PLAIN_MESSAGE);
+            } else {
+
+            }
+        }
+
+        Functions f = new Functions(tx.getText());
+        try {
+            double[] x = f.rg(a, b, 0.1);
+            double[] y = f.ev(x);
+            XYSeries ss = new XYSeries(tx.getText());
+            for (int i = 0; i < x.length; i++) {
+                ss.add(x[i], y[i]);
+            }
+            d.removeAllSeries();
+            d.addSeries(ss);
+
+        } catch (Exception ex) {
+            System.out.println("Error al obtener puntos " + ex);
+
+        }
+    }
+    
+    public void intBtn(MouseEvent e, JFrame fr, JTextField tx, JSpinner sa, JSpinner sb){
+        
     }
 
 }
