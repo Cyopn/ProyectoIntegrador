@@ -3,6 +3,7 @@ package proyectointegrador;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -109,6 +110,83 @@ public class Functions {
             System.out.println("Error al cargar elementos: " + ex);
         }
         return l;
+    }
+
+    public Map<String, Double> evalBis(double a, double b, Map<String, Double> fn) {
+        Map<String, Double> map = new HashMap<>();
+        DecimalFormat df = new DecimalFormat("#.00000");
+        double fap = (fn.get("d") * (a * a)) + (fn.get("x") * a) + (fn.get("c"));
+        double fbp = (fn.get("d") * (b * b)) + (fn.get("x") * b) + (fn.get("c"));
+        double xo = ((a) + (b)) / 2;
+        double fxo = (fn.get("d") * (xo * xo)) + (fn.get("x") * xo) + (fn.get("c"));
+        double axo = fap * fxo;
+        map.put("a", a);
+        map.put("fa", Double.parseDouble(df.format(fap)));
+        map.put("b", b);
+        map.put("fb", Double.parseDouble(df.format(fbp)));
+        map.put("xo", Double.parseDouble(df.format(xo)));
+        map.put("fxo", Double.parseDouble(df.format(fxo)));
+        map.put("rs", Double.parseDouble(df.format(axo)));
+        return map;
+    }
+
+    public Map<String, Double> evalInt(double a, double b, Map<String, Double> fn) {
+        Map<String, Double> map = new HashMap<>();
+        DecimalFormat df = new DecimalFormat("#.00000");
+        double fap = (fn.get("d") * (a * a)) + (fn.get("x") * a) + (fn.get("c"));
+        double fbp = (fn.get("d") * (b * b)) + (fn.get("x") * b) + (fn.get("c"));
+        double xo = a + (((a - b) * fap) / (fbp - fap));
+        double fxo = (fn.get("d") * (xo * xo)) + (fn.get("x") * xo) + (fn.get("c"));
+        double axo = fap * fxo;
+        map.put("a", a);
+        map.put("fa", Double.parseDouble(df.format(fap)));
+        map.put("b", b);
+        map.put("fb", Double.parseDouble(df.format(fbp)));
+        map.put("xo", Double.parseDouble(df.format(xo)));
+        map.put("fxo", Double.parseDouble(df.format(fxo)));
+        map.put("rs", Double.parseDouble(df.format(axo)));
+        return map;
+    }
+
+    public double[] gauss(List<List<String>> gb, List<Integer> f) {
+        double[] fc = new double[f.size()];
+        double[][] gbe = new double[gb.size()][3];
+        int it = 0;
+        int jt = 0;
+        for (int r : f) {
+            fc[it] = r;
+            it++;
+        }
+        it = 0;
+        for (List<String> r : gb) {
+            for (String rs : r) {
+                if (rs.isEmpty()) {
+                    rs = "0";
+                }
+                gbe[it][jt] = Integer.parseInt(rs);
+                jt++;
+            }
+            jt = 0;
+            it++;
+        }
+        int n = fc.length;
+        for (int k = 0; k < n - 1; k++) {
+            for (int i = k + 1; i < n; i++) {
+                double factor = gbe[i][k] / gbe[k][k];
+                for (int j = k; j < n; j++) {
+                    gbe[i][j] -= factor * gbe[k][j];
+                }
+                fc[i] -= factor * fc[k];
+            }
+        }
+        double[] x = new double[n];
+        for (int i = n - 1; i >= 0; i--) {
+            x[i] = fc[i] / gbe[i][i];
+            for (int j = 0; j < i; j++) {
+                fc[j] -= gbe[j][i] * x[i];
+            }
+        }
+        return x;
     }
 
     public void cleanTable(JTable t) {

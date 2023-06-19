@@ -1,9 +1,8 @@
 package proyectointegrador;
 
-import org.jfree.chart.*;
 import javax.swing.*;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.chart.*;
+import org.jfree.data.xy.*;
 
 public class Graphic extends JFrame {
 
@@ -18,15 +17,15 @@ public class Graphic extends JFrame {
         this.setResizable(false);
 
         p.setBounds(0, 0, 584, 464);
-        
+
         XYSeries ss = new XYSeries(ff);
-        
+
         for (int i = 0; i < xx.length; i++) {
             ss.add(xx[i], yy[i]);
         }
-        
+
         d.addSeries(ss);
-        
+
         XYSeries s = new XYSeries(f);
         for (int i = 0; i < x.length; i++) {
             s.add(x[i], y[i]);

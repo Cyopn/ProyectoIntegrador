@@ -1,7 +1,6 @@
 package tst;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,73 +10,82 @@ public class Test {
     private static final double EPSILON = 1e-10; // Pequeña tolerancia para comparación de números
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Introduce tu ecuacion \nFormato: Ax2+Bx+C");
-        String a = sc.nextLine();
-        Pattern cn = Pattern.compile("[+-]");
-        HashMap<String, Integer> fn = new HashMap<String, Integer>();
-        String[] cu = {"d", "x", "c"};
-        if (a.charAt(0) != '-') {
-            char[] d = a.toCharArray();
-            String s = "+";
-            a = s.concat(a);
+        List<String> ec = new ArrayList<>();
+        ec.add("2x+3y+4z=3");
+        ec.add("2x+6y+8z=5");
+        ec.add("4x+9y-4z=4");
+
+        Pattern sm = Pattern.compile("[+-=]");
+        Pattern ig = Pattern.compile("[xyz]");
+        List<String> fe = new ArrayList<>();
+        List<Integer> fc = new ArrayList<>();
+        List<List<String>> gbe = new ArrayList<>();
+        for (String a : ec) {
+            String[] b = a.split("=");
+            fe.add(b[0]);
         }
-        Matcher op = cn.matcher(a);
-        String[] ts = cn.split(a);
-        if (a.charAt(0) != '-' && ts.length > 4) {
-            System.out.println("El formato de la ecuacion es incorrecta");
-        } else if (a.charAt(0) == '-' && ts.length <= 4) {
-            int id = 0;
-            ts[0] = ts[0].substring(1);
-            for (String i : ts) {
-                if (i.charAt(0) == 'x') {
-                    i = "1x";
+        for (String a : ec) {
+            String[] b = a.split("=");
+            fc.add(Integer.parseInt(b[1]));
+        }
+
+        for (String a : fe) {
+            if (a.charAt(0) != '-') {
+                char[] d = a.toCharArray();
+                char[] newD = new char[d.length + 1];
+                newD[0] = '+';
+                System.arraycopy(d, 0, newD, 1, d.length);
+                a = new String(newD);
+            }
+            String[] im = sm.split(a);
+            String[] ii = ig.split(a);
+            List<String> sf = new ArrayList<>();
+            sf.add("");
+            sf.add("");
+            sf.add("");
+            int j = 0;
+            int i = 0;
+            String[] nm = new String[3];
+            for (String r : im) {
+                if (!r.isEmpty()) {
+                    nm[i] = r;
+                    i++;
                 }
-                if (i.indexOf("x") != -1) {
-                    i = i.substring(0, i.indexOf("x"));
-                    fn.put(cu[id], Integer.parseInt(op.group(id) + i));
-                } else {
-                    if (id == 1) {
-                        fn.put("x", 0);
-                        fn.put("c", Integer.parseInt(op.group(id) + i));
-                        id += 1;
+            }
+            for (String r : ii) {
+                if (r.length() <= 1) {
+                    if (nm[j].equals("x")) {
+                        System.out.println("x");
+                        sf.set(0, "1");
+                    } else if (nm[j].equals("y")) {
+                        System.out.println("y");
+                        sf.set(1, "1");
+                    } else if (nm[j].equals("z")) {
+                        System.out.println("z" + j);
+                        sf.set(2, "1");
                     } else {
-                        fn.put(cu[id], Integer.parseInt(op.group(id) + i));
+                        sf.set(j, "0");
+                    }
+                } else {
+                    if (nm[j].equals("x")) {
+                        sf.set(0, r);
+                    } else if (nm[j].equals("y")) {
+                        sf.set(1, r);
+                    } else if (nm[j].equals("z")) {
+                        sf.set(2, r);
+                    } else {
+                        sf.set(j, "0");
                     }
                 }
-                id += 1;
+                j++;
             }
-            if (id == 2) {
-                fn.put("c", 0);
-            }
-        } else if (a.charAt(0) == '+' && ts.length <= 4) {
-            int id = 0;
-            System.out.println(Arrays.toString(ts));
-            ts = Arrays.copyOfRange(ts, 1, ts.length);
-            for (String i : ts) {
-                if (i.charAt(0) == 'x') {
-                    i = "1x";
-                }
-                if (i.indexOf("x") != -1) {
-                    i = i.substring(0, i.indexOf("x"));
-                    fn.put(cu[id], Integer.parseInt(op.group(id) + i));
-                } else {
-                    if (id == 1) {
-                        fn.put("x", 0);
-                        fn.put("c", Integer.parseInt(op.group(id) + i));
-                        id += 1;
-                    } else {
-                        fn.put(cu[id], Integer.parseInt(op.group(id) + i));
-                    }
-                }
-                id += 1;
-            }
-            if (id == 2) {
-                fn.put("c", 0);
-            }
-        } else {
-            System.out.println("El formato de la ecuacion es incorrecta");
+            gbe.add(sf);
         }
+        double[] re = new proyectointegrador.Functions("").gauss(gbe, fc);
+        System.out.println(re[0]);
+        System.out.println(re[1]);
+        System.out.println(re[2]);
+
     }
 
     public static void simplex(double[][] tableau) {

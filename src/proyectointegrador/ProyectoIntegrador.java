@@ -27,6 +27,9 @@ public class ProyectoIntegrador extends JFrame {
     private final JMenu mn = new JMenu("Metodos Numericos");
     private final JMenuItem mni = new JMenuItem("Intervalo");
     private final JMenuItem mnb = new JMenuItem("Biseccion");
+    
+    private final JMenu ma = new JMenu("Algebra lineal");
+    private final JMenuItem mas = new JMenuItem("Sistemas de ecuaciones");
 
     public ProyectoIntegrador() {
         this.setSize(500, 400);
@@ -54,9 +57,12 @@ public class ProyectoIntegrador extends JFrame {
         mi.add(mio);
         mi.add(mir);
 
-        //mb.add(mn);
+        mb.add(mn);
         mn.add(mni);
         mn.add(mnb);
+        
+        mb.add(ma);
+        ma.add(mas);
 
         msp.addActionListener((ActionEvent e) -> {
             mspBtn(e);
@@ -94,6 +100,15 @@ public class ProyectoIntegrador extends JFrame {
         mni.addActionListener((ActionEvent e) -> {
             mniBtn(e);
         });
+        
+        mnb.addActionListener((ActionEvent e)->{
+            mnbBtn(e);
+        });
+        
+        mas.addActionListener((ActionEvent e)->{
+            masBtn(e);
+        });
+        
         this.setJMenuBar(mb);
         p.initPanel(this, mb);
         this.setVisible(true);
@@ -163,6 +178,11 @@ public class ProyectoIntegrador extends JFrame {
 
     private void mnbBtn(ActionEvent e) {
         p.cleanPanel(this);
-        p.rfPanel(this, mb);
+        p.bisPanel(this, mb);
+    }
+    
+    private void masBtn(ActionEvent e){
+        p.cleanPanel(this);
+        p.masPanel(this, mb);
     }
 }
